@@ -1,6 +1,0 @@
-.next
-node_modules
-.vercel
-.env*
-dist
-.DS_Store
