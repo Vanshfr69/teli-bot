@@ -1,4 +1,10 @@
 {
+  "devDependencies": {
+  "typescript": "^5.4.0",
+  "@types/react": "^18.0.0",
+  "@types/node": "^20.0.0"
+},
+  
   "name": "tg-stream-stable",
   "version": "1.0.0",
   "private": true,
