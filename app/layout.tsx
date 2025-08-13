@@ -1,15 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
-
 export const metadata: Metadata = {
-  title: "Telegram Video Streamer",
-  description: "Stream Telegram-hosted videos via a Vercel proxy with speed & quality controls"
+  title: "TG Stream — Premium",
+  description: "Send a video to your Telegram bot and stream it instantly on the site."
 };
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="en">
-      <body>{children}</body>
-    </html>
-  );
+  return (<html lang="en"><body>{children}</body></html>);
 }

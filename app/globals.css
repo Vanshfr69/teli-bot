@@ -1,16 +1,11 @@
-* { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji"; }
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 :root { color-scheme: light dark; }
-body { padding: 24px; line-height: 1.5; }
-.container { max-width: 960px; margin: 0 auto; }
-.card { border: 1px solid rgba(0,0,0,.1); border-radius: 16px; padding: 20px; box-shadow: 0 6px 18px rgba(0,0,0,.06); background: var(--card-bg, #fff); }
-label { display:block; font-weight: 600; margin: 12px 0 6px; }
-input, select { width: 100%; padding: 10px 12px; border-radius: 12px; border: 1px solid rgba(0,0,0,.15); }
-button { padding: 10px 14px; border-radius: 12px; border: none; cursor: pointer; font-weight: 600; }
-.btn { background: #111827; color: #fff; }
-.row { display: grid; grid-template-columns: 1fr; gap: 14px; }
-@media (min-width: 720px) { .row { grid-template-columns: 2fr 1fr; } }
-.video-wrap { margin-top: 20px; }
-.controls { display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin: 12px 0; }
-.help { font-size: 12px; opacity: .8; }
-.badge { display:inline-block; font-size: 12px; padding: 2px 8px; border-radius: 999px; background: rgba(0,0,0,.08); margin-left: 8px; }
+body { @apply bg-white dark:bg-neutral-950 text-neutral-100; }
+.container { @apply max-w-4xl mx-auto p-6; }
+.card { @apply bg-white/5 border border-neutral-800 rounded-2xl shadow-sm p-5; }
+.btn { @apply inline-flex items-center gap-2 rounded-2xl px-4 py-2 font-semibold bg-neutral-900 text-white hover:opacity-90 active:scale-[.99]; }
+.select, .input { @apply w-full rounded-2xl border border-neutral-800 bg-neutral-900 px-3 py-2; }
+.badge { @apply text-xs px-2 py-1 rounded-full bg-neutral-800; }
+.link { @apply text-blue-400 underline; }
