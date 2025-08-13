@@ -1,21 +1,35 @@
+import { NextRequest } from "next/server";
 
-import { NextRequest } from 'next/server';
+export const runtime = "nodejs";
+
+function decodeU(u: string) {
+  u = u.replace(/-/g, '+').replace(/_/g, '/');
+  const pad = u.length % 4 ? 4 - (u.length % 4) : 0;
+  return Buffer.from(u + '='.repeat(pad), 'base64').toString('utf8');
+}
+
+export async function OPTIONS() { return new Response(null, { status: 204 }); }
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const path = searchParams.get('path');
-  if (!path) return new Response('Missing path', { status: 400 });
+  const u = searchParams.get('u');
+  if (!u) return new Response('Missing u', { status: 400 });
+  const target = decodeU(u);
 
-  const tgUrl = `https://api.telegram.org/file/bot${process.env.TELEGRAM_BOT_TOKEN}/${path}`;
-  const range = req.headers.get('range') || '';
-
-  const tgRes = await fetch(tgUrl, { headers: range ? { range } : {} });
-  return new Response(tgRes.body, {
-    status: tgRes.status,
-    headers: {
-      'Content-Type': tgRes.headers.get('content-type') || 'video/mp4',
-      'Content-Length': tgRes.headers.get('content-length') || '',
-      'Accept-Ranges': 'bytes',
-    },
+  const range = req.headers.get('range') || undefined;
+  const resp = await fetch(target, {
+    method: 'GET',
+    headers: range ? { Range: range } : undefined,
+    cache: 'no-store',
   });
+
+  const headers = new Headers();
+  const passthru = ['content-type', 'content-length', 'content-range', 'accept-ranges', 'etag', 'last-modified', 'cache-control'];
+  for (const key of passthru) {
+    const v = resp.headers.get(key);
+    if (v) headers.set(key, v);
+  }
+  headers.set('Access-Control-Allow-Origin', '*');
+
+  return new Response(resp.body, { status: resp.status, headers });
 }

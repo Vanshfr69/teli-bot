@@ -1,2 +1,2 @@
-import { kv } from '@vercel/kv';
+import { kv } from "@vercel/kv";
 export default kv;

@@ -1,16 +1,22 @@
+import { NextRequest, NextResponse } from "next/server";
 
-import { NextResponse } from 'next/server';
+export const runtime = "nodejs";
 
-export async function GET() {
-  const webhookUrl = `${process.env.VERCEL_URL?.startsWith('http') ? process.env.VERCEL_URL : 'https://' + process.env.VERCEL_URL}/api/webhook`;
-  const res = await fetch(`https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/setWebhook`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      url: webhookUrl,
-      secret_token: process.env.WEBHOOK_SECRET,
-    }),
+export async function GET(req: NextRequest) {
+  const token = process.env.TELEGRAM_BOT_TOKEN;
+  const secret = process.env.WEBHOOK_SECRET;
+  if (!token || !secret) {
+    return NextResponse.json({ ok:false, reason:"Missing TELEGRAM_BOT_TOKEN or WEBHOOK_SECRET" }, { status: 500 });
+  }
+
+  const origin = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : new URL(req.url).origin;
+  const webhookUrl = `${origin}/api/webhook`;
+
+  const r = await fetch(`https://api.telegram.org/bot${token}/setWebhook`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ url: webhookUrl, secret_token: secret }),
   });
-  const data = await res.json();
-  return NextResponse.json(data);
+  const j = await r.json();
+  return NextResponse.json({ ok:true, webhookUrl, telegram: j });
 }
